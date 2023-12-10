@@ -1,4 +1,4 @@
-# IPTV Cassimiro
+# IPTV Cassimiro em desenvolvimento 
 
 Este é um aplicativo React para visualizar canais de IPTV. Ele permite que os usuários escolham um canal da lista disponível e assistam ao conteúdo de vídeo associado.
 
