@@ -15,7 +15,6 @@ const App = () => {
   const [nomeCanal, setNomeCanal] = useState('');
   const [value, setValue] = useState('');
   const [canaisFiltrados, setCanaisFiltrados] = useState([]);
-  const [showSidebar, setShowSidebar] = useState(true);
 
   // Efeito para carregar a lista de canais ao montar o componente
   useEffect(() => {
@@ -55,7 +54,6 @@ const App = () => {
     // Define a URL do canal escolhido após um pequeno atraso
     setTimeout(() => {
       setUrlCanalEscolhido(canal.url);
-      setShowSidebar(false); // Fecha o Sidebar ao clicar em um canal
     }, 500);
   };
 
@@ -81,8 +79,6 @@ const App = () => {
     <div className="app-container">
       {/* Sidebar para exibir a lista de canais */}
       <Sidebar
-        showSidebar={showSidebar}
-        onClose={() => setShowSidebar(false)}
         sidebar={renderCanais()}
         docked={true}
         styles={{
@@ -132,12 +128,6 @@ const App = () => {
           {/* Botão para acionar a busca de canais */}
           <button className="search-button" onClick={search}>
             Pesquisar
-          </button>
-          <button
-            className="toggle-sidebar-button"
-            onClick={() => setShowSidebar(!showSidebar)}
-          >
-            {showSidebar ? 'Esconder Sidebar' : 'Mostrar Sidebar'}
           </button>
         </div>
       </div>
