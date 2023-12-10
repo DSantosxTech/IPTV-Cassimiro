@@ -52,5 +52,5 @@ Antes de começar, certifique-se de ter o Node.js e o npm instalados em sua máq
 - **Lista de Canais:** Visualize a lista completa de canais disponíveis.
 - **Busca de Canais:** Utilize a barra de busca para filtrar os canais com base no nome.
 - **Reprodução de Vídeo:** Assista aos canais selecionados usando o player de vídeo ReactPlayer.
-- **Controle de Sidebar:** Mostre ou esconda a barra lateral conforme necessário.
-```
+- **Controle de Sidebar:** Mostre ou esconda a barra lateral conforme necessário
+
