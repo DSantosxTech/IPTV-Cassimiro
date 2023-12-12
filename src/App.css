@@ -1,197 +1,39 @@
-/* Reset de estilos */
-body {
-  margin: 0;
-  padding: 0;
-}
-
-/* Estilos globais */
-body {
-  font-family: 'Arial', sans-serif;
-  background: linear-gradient(90deg, rgba(0, 0, 0, 1) 5%, rgba(18, 217, 27, 1) 93%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-/* Container principal */
-.app-container {
-  display: flex;
-}
-
-/* Estilos dos cartões de canal */
-.canal-card {
-  cursor: pointer;
-  display: center;
-  align-items: center;
-  margin-bottom: 10px;
-  padding: 16px;
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-}
-
-.canal-card:hover {
-  background-color: #12cf1a;
-}
-
-.canal-logo {
-  width: 40px;
-  height: 40px;
-  margin-right: 16px;
-}
-
-.canal-nome {
-  flex: 1;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-/* Responsividade */
-@media only screen and (max-width: 1200px) {
-  .app-container {
-    flex-direction: column;
-    max-width: max-content;
-    max-height: min-content;
-    align-items: center;
-  }
-
-  .canal-card {
-    padding: 12px;
-  }
-}
-
-@media only screen and (max-width: 992px) {
-  .app-container {
-    flex-direction: column;
-    max-width: max-content;
-    max-height: min-content;
-    align-items: center;
-  }
-
-  .canal-card {
-    padding: 10px;
-  }
-}
-
-@media only screen and (max-width: 768px) {
-  .app-container {
-    flex-direction: column;
-    max-width: max-content;
-    max-height: min-content;
-    align-items: center;
-  }
-
-  .sidebar {
-    width: 100%;
-    box-shadow: none;
-  }
-
-  .canal-card {
-    padding: 8px;
-  }
-}
-
-/* Barra lateral */
-
-/* Container principal do conteúdo */
-.main-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-}
-
-/* Títulos e texto principal */
-.app-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 10px;
+.App {
   text-align: center;
 }
 
-.canal-selecionado {
-  font-size: 18px;
-  margin-bottom: 10px;
-  text-align: center;
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
 }
 
-/* Placeholder para quando nenhum canal está selecionado */
-.placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  font-size: 18px;
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
 }
 
-/* Container da barra de pesquisa */
-.search-container {
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20px;
-}
-
-/* Input de pesquisa */
-.search-input {
-  width: 100%;
-  max-width: 300px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px 0 0 5px;
-}
-
-/* Botão de pesquisa */
-.search-button,
-.toggle-sidebar-button {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 0 5px 5px 0;
-  background-color: #4caf56;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
   color: white;
-  cursor: pointer;
-  width: 100%;
-  max-width: 300px;
-  margin-top: 10px;
 }
 
-/* Container do player de vídeo */
-.player-container {
-  flex: 1;
-  position: relative;
+.App-link {
+  color: #61dafb;
 }
 
-/* Estilo adicional para o ReactPlayer */
-.react-player {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100% !important;
-  height: 100% !important;
-}
-
-/* Responsividade para telas menores */
-@media only screen and (max-width: 768px) {
-  .app-container {
-    flex-direction: column;
-    max-width: max-content;
-    max-height: min-content;
-    align-items: center;
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
   }
 
-  .main-container {
-    align-items: center;
-    /* Centraliza o conteúdo na tela menor */
-  }
-
-  .search-container {
-    align-items: flex-start;
-  }
-
-  .search-input,
-  .search-button {
-    width: 100%;
-    max-width: none;
+  to {
+    transform: rotate(360deg);
   }
 }

@@ -1,138 +1,210 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, PureComponent } from 'react';
 import ReactPlayer from 'react-player';
-import axios from 'axios';
-import Sidebar from 'react-sidebar';
 import './App.css';
+import axios from 'axios';
 
-// Importa o parser de arquivos M3U8
+import Sidebar from 'react-sidebar';
+
 const M3U8FileParser = require('m3u8-file-parser');
 const reader = new M3U8FileParser();
 
-const App = () => {
-  // Estados para armazenar a lista de canais, a URL do canal escolhido, o nome do canal, o valor da busca, os canais filtrados e o status do Sidebar
-  const [listaCanais, setListaCanais] = useState([]);
-  const [urlCanalEscolhido, setUrlCanalEscolhido] = useState('');
-  const [nomeCanal, setNomeCanal] = useState('');
-  const [value, setValue] = useState('');
-  const [canaisFiltrados, setCanaisFiltrados] = useState([]);
+function App() {
+  const [listaCanais, setlistaCanais] = useState([]);
+  const [urlCanalEscolhido, seturlCanalEscolhido] = useState('');
+  const [nomeCanal, setnomeCanal] = useState('');
+  const [value, setvalue] = useState('');
+  const [CanaisFiltrados, setCanaisFiltrados] = useState([]);
+  const [Height, setHeight] = useState(window.innerHeight);
+  const [Width, setWidth] = useState(window.innerWidth);
+  const [altura, setaltura] = useState(window.pageYOffset);
 
-  // Efeito para carregar a lista de canais ao montar o componente
   useEffect(() => {
-    const getCanais = async () => {
-      try {
-        // Obtém a lista de canais da URL fornecida
-        const result = await axios.get('https://iptv-org.github.io/iptv/countries/br.m3u');
-        // Faz a leitura do arquivo M3U8
-        reader.read(result.data);
-        // Obtém os segmentos da lista de canais
-        const lista = reader.getResult().segments;
-        // Atualiza os estados com a lista completa e a lista filtrada
-        setListaCanais(lista);
-        setCanaisFiltrados(lista);
-      } catch (error) {
-        console.error('Erro ao obter canais:', error);
-      }
-    };
+    async function getCanais() {
+      // const fetchData = async () => {
+      const result = await axios(
+        // 'https://iptv-org.github.io/iptv/index.category.m3u', //->>>> todos os canais
+        // 'https://iptv-org.github.io/iptv/categories/auto.m3u', //->>>> auto
+        // 'https://iptv-org.github.io/iptv/categories/documentary.m3u', // -->>>> documentary
+        'https://iptv-org.github.io/iptv/countries/br.m3u', // -->>>> brasil
+      );
 
+      reader.read(result.data);
+      var lista = reader.getResult().segments;
+      setlistaCanais(lista);
+      setCanaisFiltrados(lista);
+    }
     getCanais();
   }, []);
 
-  // Função para realizar a busca de canais com base no valor inserido no campo de busca
-  const search = () => {
-    const canaisFiltrados = listaCanais.filter(
-      (item) => item.inf.title.toLowerCase().includes(value.toLowerCase())
+  function search() {
+    var CanaisFiltrados = listaCanais.filter(
+      (item) =>
+        item.inf.title.toLowerCase().indexOf(value.toLowerCase()) !== -1,
     );
-    setCanaisFiltrados(canaisFiltrados);
-  };
+    // console.log(CanaisFiltrados);
+    setCanaisFiltrados(CanaisFiltrados);
+  }
 
-  // Função chamada ao clicar em um canal na lista
-  const handleCanalClick = (canal) => {
-    // Define o nome do canal e limpa a URL do canal escolhido
-    setNomeCanal(canal.inf.title);
-    setUrlCanalEscolhido('');
-
-    // Define a URL do canal escolhido após um pequeno atraso
-    setTimeout(() => {
-      setUrlCanalEscolhido(canal.url);
-    }, 500);
-  };
-
-  // Função para renderizar a lista de canais
-  const renderCanais = () => {
-    return canaisFiltrados.map((canal) => (
+  function BotaoCanal({ canal }) {
+    return (
       <div
-        key={canal.inf.title}
-        className="canal-card"
-        onClick={() => handleCanalClick(canal)}
+        style={{
+          alignItems: 'center',
+          // flexDirection: 'row',
+          margin: 10,
+          padding: 10,
+          backgroundColor: '#7159ca',
+          borderRadius: 10,
+          justifyContent: 'center',
+          width: Width / 5 - 20,
+          cursor: 'pointer',
+        }}
+        onClick={() => {
+          // console.log(canal.url);
+          setnomeCanal(canal.inf.title);
+          seturlCanalEscolhido('');
+          setTimeout(() => {
+            seturlCanalEscolhido(canal.url);
+          }, 500);
+        }}
       >
         {canal.inf.tvgLogo !== '' ? (
-          <img alt={canal.inf.title} className="canal-logo" src={canal.inf.tvgLogo} />
+          <img
+            alt={canal.inf.title}
+            resizeMode='contain'
+            src={canal.inf.tvgLogo}
+            style={{
+              height: 50,
+              width: 50,
+              marginRight: 30,
+              borderRadius: 5,
+              backgroundColor: 'white',
+            }}
+          />
         ) : (
-          <div className="placeholder-logo" />
+          <div
+            style={{
+              height: 50,
+              width: 50,
+              marginRight: 30,
+              borderRadius: 25,
+              backgroundColor: 'white',
+            }}
+          />
         )}
-        <div className="canal-nome">{canal.inf.title}</div>
+        <div style={{ fontSize: 20, cursor: 'pointer' }}>
+          {canal.inf.title}
+        </div>
       </div>
-    ));
-  };
+    );
+  }
 
   return (
-    <div className="app-container">
-      {/* Sidebar para exibir a lista de canais */}
+    <div
+      style={{
+        backgroundColor: '#282c34',
+        display: 'flex',
+        // flexDirection: 'row',
+        // alignItems: 'center',
+        justifyContent: 'space-around',
+        fontSize: 20,
+        color: 'white',
+        scrollSnapType: 'mandatory',
+        // height: Height,
+        // maxHeight: Height,
+        // width: 200,
+      }}
+    >
       <Sidebar
-        sidebar={renderCanais()}
+        showVerticalScrollIndicator={false}
+        sidebar={CanaisFiltrados.map((canal) => {
+          return <BotaoCanal key={canal.inf.title} canal={canal} />;
+        })}
+        // open={true}
         docked={true}
+        // onSetOpen={this.onSetSidebarOpen}
         styles={{
           sidebar: {
-            color: "white",
-            background: "#000000",
-            width: "15vw", /* Alterado para ocupar 100% da largura na tela menor */
-            display: "flex",
-            flexDirection: "column",
-            overflowY: "auto", /* Alterado para camelCase */
-            padding: "20px",
-            boxShadow: "2px 0 5px rgba(0, 0, 0, 0.1)", /* Alterado para camelCase */
+            background: '#000',
+            width: Width / 5 + 30,
+            showVerticalScrollIndicator: false,
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
           },
         }}
-      />
+      ></Sidebar>
 
-      {/* Contêiner principal da aplicação */}
-      <div className="main-container">
-        {/* Botão para mostrar/ocultar a Sidebar */}
-
-        {/* Título da aplicação */}
-        <label className="app-title">IPTV - Cassimiro</label>
-        {/* Nome do canal selecionado */}
-        <label className="canal-selecionado">{nomeCanal}</label>
-        {/* Contêiner do player de vídeo */}
-        <div className="player-container">
-          {/* Renderiza o player de vídeo se a URL do canal estiver definida */}
+      <div
+        style={{
+          display: 'flex',
+          flex: 8,
+          // backgroundColor: '#ffa500',
+          flexDirection: 'column',
+          marginLeft: 30,
+          alignItems: 'center',
+          justifyContent: 'space-around',
+          height: Height,
+          marginLeft: Width / 5 + 30,
+        }}
+      >
+        <label>IPTV Cassimiro</label>
+        <label>{nomeCanal}</label>
+        <div
+          style={{
+            alignItems: 'center',
+            // justifyContent: 'space-around',
+          }}
+        >
           {urlCanalEscolhido.length > 0 ? (
-            <ReactPlayer autoPlay controls url={urlCanalEscolhido} />
+            <ReactPlayer
+              // height={600}
+              // width={900}
+              autoPlay
+              controls
+              url={urlCanalEscolhido}
+            />
           ) : (
-            // Mensagem de orientação quando nenhum canal está selecionado
-            <div className="placeholder">
+            <div style={{ height: 600 }}>
               <label>Escolha um canal na lista ao lado</label>
             </div>
           )}
         </div>
-        {/* Contêiner de busca de canais */}
-        <div className="search-container">
-          {/* Campo de input para inserir o termo de busca */}
+        <div style={{ zIndex: 999 }}>
           <input
-            className="search-input"
-            type="text"
+            style={{
+              height: 30,
+              width: 250,
+              borderRadius: 10,
+              borderWidth: 0,
+              paddingLeft: 10,
+            }}
+            type='text'
             value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder="Digite o nome do canal"
+            onChange={(e) => {
+              setvalue(e.target.value);
+            }}
+            placeholder='Digite o nome do canal:'
           />
-          {/* Botão para acionar a busca de canais */}
-          <button className="search-button" onClick={search}>
+          <button
+            style={{
+              height: 30,
+              borderRadius: 10,
+              borderWidth: 0,
+              marginLeft: 5,
+              color: 'white',
+              background: '#7159ca',
+            }}
+            onClick={() => search()}
+          >
             Pesquisar
           </button>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default App;
